@@ -2,6 +2,7 @@ package com.blizpear.cfttestapp.presentation.registration
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.blizpear.cfttestapp.domain.model.PersonData
@@ -12,82 +13,96 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistrationViewModel @Inject constructor() : ViewModel() {
 
-    private val _name = MutableLiveData<String>("")
+    companion object {
+        const val MIN_LETTER = 2
+
+    }
+
+    private val _name = MutableLiveData("")
     private val _surname = MutableLiveData("")
     private val _passwd = MutableLiveData("")
     private val _rePasswd = MutableLiveData("")
-    private val _correctPasswd = MutableLiveData(false)
     private val _date = MutableLiveData("")
+
+    private val _nameStatus = MutableLiveData<Boolean>(false)
+    private val _surnameStatus = MutableLiveData<Boolean>(false)
+    private val _correctPasswdStatus = MutableLiveData<Boolean>(false)
+    private val _dateStatus = MutableLiveData<Boolean>(false)
+
+    val nameStatus: LiveData<Boolean> = _nameStatus
+    val surnameStatus: LiveData<Boolean> = _surnameStatus
+    val correctPasswdStatus: LiveData<Boolean> = _correctPasswdStatus
+    val dateStatus: LiveData<Boolean> = _dateStatus
+
+    val statusAllFields = MediatorLiveData<Boolean>().apply {
+        value = false
+        addSource(_name) { value = allFieldsNotEmptyAndCorrect() }
+        addSource(_surname) { value = allFieldsNotEmptyAndCorrect() }
+        addSource(_correctPasswdStatus) { value = allFieldsNotEmptyAndCorrect() }
+        addSource(_date) { value = allFieldsNotEmptyAndCorrect() }
+    }
 
     lateinit var personData: PersonData
 
     fun onNameChanged(text: CharSequence?) {
-        if (text.isNullOrEmpty())
-            _name.value = ""
-        else
-            if (_name.value != text) {
-                _name.value = text.toString()
-                Timber.d("${_name.value}")
-            }
+        if (_name.value != text) {
+            _name.value = text.toString()
+            Timber.d("${_name.value}")
+        }
     }
 
     fun onSurnameChanged(text: CharSequence?) {
-        if (text.isNullOrEmpty())
-            _surname.value = ""
-        else
-            if (_surname.value != text) {
-                _surname.value = text.toString()
-                Timber.i("${_surname.value}")
-            }
+        if (_surname.value != text) {
+            _surname.value = text.toString()
+            Timber.i("${_surname.value}")
+        }
     }
 
     fun onPasswdChanged(text: CharSequence?) {
-        if (text.isNullOrEmpty())
-            _passwd.value = ""
-        else
-            if (_passwd.value != text) {
-                _passwd.value = text.toString()
-                Timber.i("${_passwd.value}")
-            }
-        passwIsCorrect()
+        if (_passwd.value != text) {
+            _passwd.value = text.toString()
+            Timber.i("${_passwd.value}")
+        }
+        passwdIsCorrect()
     }
 
     fun onRepasswdChanged(text: CharSequence?) {
-        if (text.isNullOrEmpty())
-            _rePasswd.value = ""
-        else
-            if (_rePasswd.value != text) {
-                _rePasswd.value = text.toString()
-                Timber.i("${_rePasswd.value}")
-            }
-        passwIsCorrect()
+        if (_rePasswd.value != text) {
+            _rePasswd.value = text.toString()
+            Timber.i("${_rePasswd.value}")
+        }
+        passwdIsCorrect()
     }
 
     fun onDateChanged(text: CharSequence?) {
-        if (text.isNullOrEmpty())
-            _date.value = ""
-        else
-            if (_date.value != text) {
-                _date.value = text.toString()
-                Timber.i("${_date.value}")
-            }
-    }
-
-    fun allFieldsNotEmptyAndCorrect(): Boolean {
-        return _name.value !== "" &&
-                _passwd.value !== "" &&
-                _rePasswd.value !== "" &&
-                _surname.value !== "" &&
-                _date.value !== "" &&
-                _correctPasswd.value == true
+        if (_date.value != text) {
+            _date.value = text.toString()
+            Timber.i("${_date.value}")
+        }
     }
 
     fun onButtonClicked() {
         personData = PersonData(_name.value!!, _surname.value!!, _passwd.value!!, _date.value!!)
     }
 
-    private fun passwIsCorrect() {
-        if (_passwd.value == _rePasswd.value)
-            _correctPasswd.value = true
+    private fun passwdIsCorrect() {
+        _correctPasswdStatus.value = _passwd.value == _rePasswd.value
+
+    }
+
+    private fun allFieldsNotEmpty(): Boolean {
+        return !_name.value.isNullOrBlank() &&
+                !_passwd.value.isNullOrBlank() &&
+                !_rePasswd.value.isNullOrBlank() &&
+                !_surname.value.isNullOrBlank() &&
+                !_date.value.isNullOrBlank() &&
+                !_passwd.value.isNullOrBlank() &&
+                !_rePasswd.value.isNullOrBlank()
+    }
+
+    private fun allFieldsNotEmptyAndCorrect(): Boolean {
+        return allFieldsNotEmpty()
+                && _correctPasswdStatus.value!!
+
     }
 }

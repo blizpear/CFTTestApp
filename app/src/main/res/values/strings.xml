@@ -3,10 +3,19 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="reg_text">Регистрация</string>
-    <string name="nameString">Имя</string>
-    <string name="surnameString">Фамилия</string>
-    <string name="dateString">Дата</string>
-    <string name="passwdString">Пароль</string>
-    <string name="rePasswdString">Повторите пароль</string>
-    <string name="greetingString" >Приветствие</string>
+    <string name="name_string">Имя</string>
+    <string name="surname_string">Фамилия</string>
+    <string name="date_string">Дата</string>
+    <string name="passwd_string">Пароль</string>
+    <string name="re_passwd_string">Повторите пароль</string>
+    <string name="greeting_string" >Приветствие</string>
+
+    <string name="name_error">Имя должно содержать не менее 2 букв.</string>
+    <string name="surname_error">Фамилия должна содержать не менее 2 букв.</string>
+    <string name="date_error">Вы точно живы?</string>
+    <string name="passwd_error">Пароль должен содержать цифры и буквы верхнего регистра</string>
+    <string name="repasswd_error">Пароли не совпадают</string>
+
+
+
 </resources>
