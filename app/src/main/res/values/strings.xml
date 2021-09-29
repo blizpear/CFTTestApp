@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">CFTTestApp</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="reg_text">Регистрация</string>
+    <string name="nameString">Имя</string>
+    <string name="surnameString">Фамилия</string>
+    <string name="dateString">Дата</string>
+    <string name="passwdString">Пароль</string>
+    <string name="rePasswdString">Повторите пароль</string>
+    <string name="greetingString" >Приветствие</string>
 </resources>
