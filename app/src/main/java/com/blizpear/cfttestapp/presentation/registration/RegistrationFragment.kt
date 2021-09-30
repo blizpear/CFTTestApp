@@ -58,6 +58,8 @@ class RegistrationFragment : Fragment() {
             } else {
                 binding.passwdInputLayout.isErrorEnabled = false
                 binding.passwdInputLayout.error = null
+                binding.repasswdInputLayout.isErrorEnabled = false
+                binding.repasswdInputLayout.error = null
             }
         }
 
@@ -70,6 +72,8 @@ class RegistrationFragment : Fragment() {
             } else {
                 binding.repasswdInputLayout.isErrorEnabled = false
                 binding.repasswdInputLayout.error = null
+                binding.passwdInputLayout.isErrorEnabled = false
+                binding.passwdInputLayout.error = null
             }
         }
 

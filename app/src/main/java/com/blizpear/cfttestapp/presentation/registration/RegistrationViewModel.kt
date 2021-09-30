@@ -15,14 +15,14 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
 
     companion object {
         const val MIN_LETTER = 2
-
+        const val MIN_DATE = "01.12.1902"
     }
 
     private val _name = MutableLiveData("")
     private val _surname = MutableLiveData("")
     private val _passwd = MutableLiveData("")
     private val _rePasswd = MutableLiveData("")
-    private val _date = MutableLiveData("")
+    private val _date = MutableLiveData("01.01.1800")
 
     private val _nameStatus = MutableLiveData<Boolean>(false)
     private val _surnameStatus = MutableLiveData<Boolean>(false)
@@ -47,6 +47,7 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
     fun onNameChanged(text: CharSequence?) {
         if (_name.value != text) {
             _name.value = text.toString()
+            nameIsCorrect()
             Timber.d("${_name.value}")
         }
     }
@@ -54,6 +55,7 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
     fun onSurnameChanged(text: CharSequence?) {
         if (_surname.value != text) {
             _surname.value = text.toString()
+            surnameIsCorrect()
             Timber.i("${_surname.value}")
         }
     }
@@ -77,6 +79,7 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
     fun onDateChanged(text: CharSequence?) {
         if (_date.value != text) {
             _date.value = text.toString()
+            dateIsCorrect()
             Timber.i("${_date.value}")
         }
     }
@@ -86,8 +89,20 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun passwdIsCorrect() {
-        _correctPasswdStatus.value = _passwd.value == _rePasswd.value
+        _correctPasswdStatus.value =
+            (_passwd.value == _rePasswd.value) && _passwd.value!!.contains("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])".toRegex())
+    }
 
+    private fun nameIsCorrect() {
+        _nameStatus.value = _name.value?.length!! >= MIN_LETTER
+    }
+
+    private fun surnameIsCorrect() {
+        _surnameStatus.value = _surname.value?.length!! >= MIN_LETTER
+    }
+
+    private fun dateIsCorrect() {
+        _dateStatus.value = _date.value!! > MIN_DATE
     }
 
     private fun allFieldsNotEmpty(): Boolean {
@@ -103,6 +118,8 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
     private fun allFieldsNotEmptyAndCorrect(): Boolean {
         return allFieldsNotEmpty()
                 && _correctPasswdStatus.value!!
-
+                && _nameStatus.value!!
+                && _surnameStatus.value!!
+                && _dateStatus.value!!
     }
 }
