@@ -12,7 +12,7 @@
 
     <string name="name_error">Имя должно содержать не менее 2 букв.</string>
     <string name="surname_error">Фамилия должна содержать не менее 2 букв.</string>
-    <string name="date_error">Вы точно живы?</string>
+    <string name="date_error">Введите дату в формате dd-mm-yyyy</string>
     <string name="passwd_error">Пароль должен содержать цифры и буквы верхнего регистра</string>
     <string name="repasswd_error">Пароли не совпадают</string>
 

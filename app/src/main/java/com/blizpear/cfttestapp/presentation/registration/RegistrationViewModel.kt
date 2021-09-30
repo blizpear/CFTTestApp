@@ -5,9 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.blizpear.cfttestapp.R
 import com.blizpear.cfttestapp.domain.model.PersonData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,14 +19,14 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
 
     companion object {
         const val MIN_LETTER = 2
-        const val MIN_DATE = "01.12.1902"
+        const val MIN_DATE = "01-12-1902"
     }
 
     private val _name = MutableLiveData("")
     private val _surname = MutableLiveData("")
     private val _passwd = MutableLiveData("")
     private val _rePasswd = MutableLiveData("")
-    private val _date = MutableLiveData("01.01.1800")
+    private val _date = MutableLiveData<String>()
 
     private val _nameStatus = MutableLiveData<Boolean>(false)
     private val _surnameStatus = MutableLiveData<Boolean>(false)
@@ -102,7 +106,14 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun dateIsCorrect() {
-        _dateStatus.value = _date.value!! > MIN_DATE
+        if (_date.value?.length!! < 10) {
+            _dateStatus.value = false
+        } else {
+            val formatter = DateTimeFormatter.ofPattern("d-MM-yyyy", Locale.ENGLISH)
+            val dateTmp = LocalDate.parse(_date.value, formatter)
+            if (dateTmp > LocalDate.parse(MIN_DATE, formatter))
+                _dateStatus.value = true
+        }
     }
 
     private fun allFieldsNotEmpty(): Boolean {
