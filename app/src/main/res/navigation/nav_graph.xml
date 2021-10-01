@@ -9,7 +9,7 @@
         android:id="@+id/registrationFragment"
         android:name="com.blizpear.cfttestapp.presentation.registration.RegistrationFragment"
         android:label="registration_fragment"
-        tools:layout="@layout/registration_fragment" >
+        tools:layout="@layout/registration_fragment">
         <action
             android:id="@+id/action_registrationFragment_to_greetingsFragment"
             app:destination="@id/greetingsFragment" />

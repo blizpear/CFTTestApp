@@ -1,29 +1,30 @@
 package com.blizpear.cfttestapp.presentation.registration
 
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import com.blizpear.cfttestapp.R
 import com.blizpear.cfttestapp.databinding.RegistrationFragmentBinding
+import java.util.*
 
 class RegistrationFragment : Fragment() {
 
+    private lateinit var binding: RegistrationFragmentBinding
     private val viewModel: RegistrationViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = RegistrationFragmentBinding.inflate(inflater)
+        binding = RegistrationFragmentBinding.inflate(inflater)
 
         binding.nameTextField.doOnTextChanged { text, _, _, _ ->
             viewModel.onNameChanged(text ?: "")
@@ -80,18 +81,6 @@ class RegistrationFragment : Fragment() {
             }
         }
 
-        binding.dateEditText.doOnTextChanged { text, _, _, _ ->
-            viewModel.onDateChanged(text)
-
-            if (viewModel.dateStatus.value == false) {
-                binding.dateInputLayout.isErrorEnabled = true
-                binding.dateInputLayout.error = context?.resources?.getString(R.string.date_error)
-            } else {
-                binding.dateInputLayout.isErrorEnabled = false
-                binding.dateInputLayout.error = null
-            }
-        }
-
         binding.registrationButton.setOnClickListener {
             viewModel.onButtonClicked()
             findNavController().navigate(
@@ -100,6 +89,9 @@ class RegistrationFragment : Fragment() {
             )
         }
 
+        binding.dateButton.setOnClickListener {
+            callDatePicker()
+        }
 
         viewModel.statusAllFields.observe(viewLifecycleOwner, {
             if (it) {
@@ -113,20 +105,21 @@ class RegistrationFragment : Fragment() {
             }
         })
 
-//        viewModel.nameStatus.observe(viewLifecycleOwner, {
-//            if (!it) {
-//                binding.textInputLayout.error = R.string.name_error.toString()
-//            } else binding.textInputLayout.isErrorEnabled = false
-//        })
-//        viewModel.surnameStatus.observe(viewLifecycleOwner, {
-//
-//        })
-//        viewModel.dateStatus.observe(viewLifecycleOwner, {
-//
-//        })
-//        viewModel.correctPasswdStatus.observe(viewLifecycleOwner, {
-//
-//        })
         return binding.root
+    }
+
+    private fun callDatePicker() {
+        val dpd = DatePickerDialog(
+            requireContext(),
+            { _, year, monthOfYear, dayOfMonth ->
+                viewModel.onDateChanged(dayOfMonth, monthOfYear, year)
+                binding.dateButton.text = "$dayOfMonth-$monthOfYear-$year"
+
+            },
+            Calendar.getInstance().get(Calendar.YEAR),
+            Calendar.getInstance().get(Calendar.MONTH),
+            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        )
+        dpd.show()
     }
 }

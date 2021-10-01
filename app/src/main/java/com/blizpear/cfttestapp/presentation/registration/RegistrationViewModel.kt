@@ -35,7 +35,6 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
     val nameStatus: LiveData<Boolean> = _nameStatus
     val surnameStatus: LiveData<Boolean> = _surnameStatus
     val correctPasswdStatus: LiveData<Boolean> = _correctPasswdStatus
-    val dateStatus: LiveData<Boolean> = _dateStatus
 
     val statusAllFields = MediatorLiveData<Boolean>().apply {
         value = false
@@ -79,14 +78,6 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
         passwdIsCorrect()
     }
 
-    fun onDateChanged(text: CharSequence?) {
-        if (_date.value != text) {
-            _date.value = text.toString()
-            dateIsCorrect()
-            Timber.i("${_date.value}")
-        }
-    }
-
     fun onButtonClicked() {
         personData = PersonData(_name.value!!, _surname.value!!, _passwd.value!!, _date.value!!)
     }
@@ -104,6 +95,25 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
 
     private fun surnameIsCorrect() {
         _surnameStatus.value = _surname.value?.length!! >= MIN_LETTER_NAME
+    }
+
+    fun onDateChanged(day: Int, month: Int, year: Int) {
+        val text = dateFormat(day, month, year)
+
+        if (_date.value != text) {
+            _date.value = text
+
+            dateIsCorrect()
+            Timber.i("date: ${_date.value}")
+        }
+    }
+
+    private fun dateFormat(day: Int, month: Int, year: Int): String {
+        return if (day < 10 && month < 10)
+            "0$day-0$month-$year"
+        else if (day < 10 && month >= 10)
+            "0$day-$month-$year"
+        else "$day-$month-$year"
     }
 
     private fun dateIsCorrect() {
@@ -128,6 +138,15 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun allFieldsNotEmptyAndCorrect(): Boolean {
+
+        Timber.i(
+            "TEST ALL AllField: ${allFieldsNotEmpty()}" +
+                    " passwd ${_correctPasswdStatus.value}" +
+                    " name ${_nameStatus.value}" +
+                    " surname ${_surnameStatus.value}" +
+                    " date ${_dateStatus.value}"
+        )
+
         return allFieldsNotEmpty()
                 && _correctPasswdStatus.value!!
                 && _nameStatus.value!!
