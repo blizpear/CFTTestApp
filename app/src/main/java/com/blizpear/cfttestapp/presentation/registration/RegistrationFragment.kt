@@ -42,7 +42,8 @@ class RegistrationFragment : Fragment() {
 
             if (viewModel.surnameStatus.value == false) {
                 binding.surnameInputLayout.isErrorEnabled = true
-                binding.surnameInputLayout.error = context?.resources?.getString(R.string.surname_error)
+                binding.surnameInputLayout.error =
+                    context?.resources?.getString(R.string.surname_error)
             } else {
                 binding.surnameInputLayout.isErrorEnabled = false
                 binding.surnameInputLayout.error = null
@@ -54,7 +55,8 @@ class RegistrationFragment : Fragment() {
 
             if (viewModel.correctPasswdStatus.value == false) {
                 binding.passwdInputLayout.isErrorEnabled = true
-                binding.passwdInputLayout.error = context?.resources?.getString(R.string.passwd_error)
+                binding.passwdInputLayout.error =
+                    context?.resources?.getString(R.string.passwd_error)
             } else {
                 binding.passwdInputLayout.isErrorEnabled = false
                 binding.passwdInputLayout.error = null
@@ -68,7 +70,8 @@ class RegistrationFragment : Fragment() {
 
             if (viewModel.correctPasswdStatus.value == false) {
                 binding.repasswdInputLayout.isErrorEnabled = true
-                binding.repasswdInputLayout.error = context?.resources?.getString(R.string.repasswd_error)
+                binding.repasswdInputLayout.error =
+                    context?.resources?.getString(R.string.repasswd_error)
             } else {
                 binding.repasswdInputLayout.isErrorEnabled = false
                 binding.repasswdInputLayout.error = null

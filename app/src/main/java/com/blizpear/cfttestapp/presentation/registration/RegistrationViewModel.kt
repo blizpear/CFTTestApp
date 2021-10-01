@@ -1,11 +1,9 @@
 package com.blizpear.cfttestapp.presentation.registration
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.blizpear.cfttestapp.R
 import com.blizpear.cfttestapp.domain.model.PersonData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import timber.log.Timber
@@ -18,7 +16,8 @@ import javax.inject.Inject
 class RegistrationViewModel @Inject constructor() : ViewModel() {
 
     companion object {
-        const val MIN_LETTER = 2
+        const val MIN_LETTER_NAME = 2
+        const val MIN_LETTER_PASSWD = 6
         const val MIN_DATE = "01-12-1902"
     }
 
@@ -94,15 +93,17 @@ class RegistrationViewModel @Inject constructor() : ViewModel() {
 
     private fun passwdIsCorrect() {
         _correctPasswdStatus.value =
-            (_passwd.value == _rePasswd.value) && _passwd.value!!.contains("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])".toRegex())
+            (_passwd.value == _rePasswd.value)
+                    && _passwd.value!!.contains("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])".toRegex())
+                    && _passwd.value?.length!! >= MIN_LETTER_PASSWD
     }
 
     private fun nameIsCorrect() {
-        _nameStatus.value = _name.value?.length!! >= MIN_LETTER
+        _nameStatus.value = _name.value?.length!! >= MIN_LETTER_NAME
     }
 
     private fun surnameIsCorrect() {
-        _surnameStatus.value = _surname.value?.length!! >= MIN_LETTER
+        _surnameStatus.value = _surname.value?.length!! >= MIN_LETTER_NAME
     }
 
     private fun dateIsCorrect() {
