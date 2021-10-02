@@ -13,8 +13,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.blizpear.cfttestapp.R
 import com.blizpear.cfttestapp.databinding.RegistrationFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class RegistrationFragment : Fragment() {
 
     private lateinit var binding: RegistrationFragmentBinding
